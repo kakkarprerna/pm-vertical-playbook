@@ -56,13 +56,14 @@ export interface ResourceItem {
 
 export interface ChecklistItem {
   id: string;
-  vertical_id: string;
+  vertical_id: string | null; // null = cross-cutting, shown under every vertical
   stage_id: string;
   title: string;
   description: string | null;
   is_starter_item: boolean;
   status: ChecklistStatus;
   evidence_id: string | null;
+  tag: string | null; // e.g. "AI PM" — badges cross-cutting items by skill group
 }
 
 export interface EvidenceEntry {

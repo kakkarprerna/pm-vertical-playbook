@@ -30,7 +30,10 @@ export default async function VerticalPage({
   const [{ data: stages }, { data: checklistItems }, { data: resources }] =
     await Promise.all([
       supabase.from("lifecycle_stages").select("*").order("order"),
-      supabase.from("checklist_items").select("*").eq("vertical_id", v.id),
+      supabase
+        .from("checklist_items")
+        .select("*")
+        .or(`vertical_id.eq.${v.id},vertical_id.is.null`),
       supabase
         .from("resource_items")
         .select("*")
@@ -80,7 +83,9 @@ export default async function VerticalPage({
 
       <div className="mt-14 space-y-14">
         {s.map((stage) => {
-          const stageItems = items.filter((i) => i.stage_id === stage.id);
+          const stageItems = items
+            .filter((i) => i.stage_id === stage.id)
+            .sort((a, b) => (a.tag ? 1 : 0) - (b.tag ? 1 : 0));
           return (
             <section key={stage.id}>
               <div className="mb-3 flex items-baseline gap-3">

@@ -25,7 +25,9 @@ export default async function DashboardPage() {
     progress[vertical.id] = {};
     for (const stage of s) {
       const cellItems = items.filter(
-        (i) => i.vertical_id === vertical.id && i.stage_id === stage.id
+        (i) =>
+          (i.vertical_id === vertical.id || i.vertical_id === null) &&
+          i.stage_id === stage.id
       );
       const shipped = cellItems.filter((i) => i.status === "shipped").length;
       progress[vertical.id][stage.id] = cellItems.length

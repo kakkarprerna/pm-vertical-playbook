@@ -31,8 +31,8 @@ export default async function PortfolioPage({
     supabase
       .from("checklist_items")
       .select("*")
-      .eq("vertical_id", v.id)
-      .eq("status", "shipped"),
+      .eq("status", "shipped")
+      .or(`vertical_id.eq.${v.id},vertical_id.is.null`),
   ]);
 
   const s = (stages ?? []) as LifecycleStage[];
@@ -99,7 +99,12 @@ export default async function PortfolioPage({
                       key={item.id}
                       className="rounded-lg border border-graphite/15 bg-white/60 p-4"
                     >
-                      <p className="font-body text-sm font-semibold text-graphite">
+                      <p className="flex items-center gap-2 font-body text-sm font-semibold text-graphite">
+                        {item.tag && (
+                          <span className="shrink-0 rounded-full border border-indigo-200 bg-indigo-50 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-indigo-700">
+                            {item.tag}
+                          </span>
+                        )}
                         {item.title}
                       </p>
                       {ev && (

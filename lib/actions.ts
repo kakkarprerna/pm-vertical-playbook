@@ -45,8 +45,8 @@ export async function generatePortfolioCaseStudy(
   const { data: shipped } = await supabase
     .from("checklist_items")
     .select("id")
-    .eq("vertical_id", verticalId)
-    .eq("status", "shipped");
+    .eq("status", "shipped")
+    .or(`vertical_id.eq.${verticalId},vertical_id.is.null`);
 
   const ids = (shipped ?? []).map((i) => i.id);
 

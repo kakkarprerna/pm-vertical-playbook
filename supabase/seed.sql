@@ -266,3 +266,24 @@ from verticals v, lifecycle_stages s,
     ('sunset', 'Write a retrospective on a discontinued HR tech pilot')
   ) as x(stage_slug, title)
 where v.slug = 'hr-tech' and s.slug = x.stage_slug;
+
+-- AI PM (cross-cutting) — vertical_id is null, so these show up under all
+-- four verticals at the matching stage, tagged 'AI PM'.
+insert into checklist_items (vertical_id, stage_id, title, tag)
+select null, s.id, x.title, 'AI PM'
+from lifecycle_stages s,
+  (values
+    ('discovery', 'Assess model capability boundaries and data quality/availability for the problem space'),
+    ('discovery', 'Map user trust and explainability requirements for AI-driven outputs'),
+    ('definition', 'Define AI-specific success metrics: accuracy, latency, cost per inference, hallucination rate'),
+    ('definition', 'Decide on human-in-the-loop vs. full automation and set failure/fallback guardrails'),
+    ('build', 'Write prompt and eval specs alongside the functional spec, including a golden dataset'),
+    ('build', 'Define observability requirements: logging inputs/outputs, drift detection'),
+    ('launch', 'Plan a phased rollout with kill switches or feature flags for the AI feature'),
+    ('launch', 'Prepare user-facing messaging on AI limitations and an error escalation path'),
+    ('growth', 'Run a continuous eval/feedback loop and monitor for model drift or vendor updates'),
+    ('growth', 'A/B test a prompt or model change and track cost-per-outcome as usage scales'),
+    ('sunset', 'Define deprecation criteria for an AI feature or model version'),
+    ('sunset', 'Document a model/vendor migration plan and write a retrospective on performance')
+  ) as x(stage_slug, title)
+where s.slug = x.stage_slug;

@@ -33,13 +33,14 @@ create table if not exists resource_items (
 
 create table if not exists checklist_items (
   id uuid primary key default uuid_generate_v4(),
-  vertical_id uuid not null references verticals(id) on delete cascade,
+  vertical_id uuid references verticals(id) on delete cascade, -- null = cross-cutting, shown under every vertical
   stage_id uuid not null references lifecycle_stages(id) on delete cascade,
   title text not null,
   description text,
   is_starter_item boolean not null default true,
   status text not null default 'not_started' check (status in ('not_started','learning','applied','shipped')),
-  evidence_id uuid
+  evidence_id uuid,
+  tag text -- e.g. 'AI PM', badges cross-cutting items by skill group
 );
 
 create table if not exists evidence_entries (

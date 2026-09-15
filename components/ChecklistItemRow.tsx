@@ -31,7 +31,14 @@ export default function ChecklistItemRow({
 
   return (
     <li className="flex items-center justify-between gap-3 border-b border-graphite/10 py-2.5 last:border-none">
-      <span className="font-body text-sm text-graphite">{item.title}</span>
+      <span className="flex items-center gap-2">
+        {item.tag && (
+          <span className="shrink-0 rounded-full border border-indigo-200 bg-indigo-50 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-indigo-700">
+            {item.tag}
+          </span>
+        )}
+        <span className="font-body text-sm text-graphite">{item.title}</span>
+      </span>
       <button
         onClick={advance}
         disabled={isPending}
